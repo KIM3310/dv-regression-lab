@@ -1,0 +1,46 @@
+suite_id: power_intent_nightly
+title: Power intent and X-propagation nightly regression
+owner: dv-platform
+description: Nightly UPF-style gate for reset, retention, and low-power crossings.
+simulator:
+  kind: mock
+  compile_timeout_sec: 45
+  run_timeout_sec: 240
+tests:
+  - id: retention_restore_smoke
+    title: Retention restore smoke
+    module: tb_retention_restore_smoke
+    tags: [upf, retention]
+    seed: 707
+    owner: low-power
+    expected_runtime_sec: 7.0
+    design_units: [retention_ctrl.sv, pwr_domain_mgr.sv]
+    profile: pass
+  - id: upf_compile_guard
+    title: UPF compile guard
+    module: tb_upf_compile_guard
+    tags: [upf, compile]
+    seed: 808
+    owner: low-power
+    expected_runtime_sec: 3.5
+    design_units: [pwr_domain_mgr.sv]
+    profile: compile_error
+  - id: isolation_xprop_scan
+    title: Isolation X-propagation scan
+    module: tb_isolation_xprop_scan
+    tags: [upf, xprop]
+    seed: 909
+    owner: low-power
+    expected_runtime_sec: 8.2
+    design_units: [isolation_cell_array.sv, pwr_domain_mgr.sv]
+    profile: x_propagation
+  - id: wakeup_sequence_latency
+    title: Wakeup sequence latency budget
+    module: tb_wakeup_sequence_latency
+    tags: [wakeup, nightly]
+    seed: 1001
+    owner: dv-platform
+    expected_runtime_sec: 9.1
+    design_units: [wakeup_ctrl.sv, retention_ctrl.sv]
+    profile: flaky_timeout
+
