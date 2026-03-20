@@ -1,0 +1,38 @@
+suite_id: rtl_smoke_iverilog
+title: Real RTL smoke gate with Icarus Verilog
+owner: dv-platform
+description: Small but real RTL/DV smoke suite executed with iverilog and vvp instead of the mock adapter.
+simulator:
+  kind: iverilog
+  compile_timeout_sec: 20
+  run_timeout_sec: 5
+  work_dir: .
+  sources: [rtl/irq_router.sv]
+  compile_flags: [-Wall]
+tests:
+  - id: irq_router_smoke
+    title: Priority routing smoke
+    module: tb_irq_router_smoke
+    tags: [rtl, dv, smoke, iverilog]
+    seed: 11
+    owner: dv
+    expected_runtime_sec: 0.2
+    design_units: [irq_router.sv]
+    profile: real_iverilog
+    sources: [tb/tb_irq_router_smoke.sv]
+    pass_patterns: [TEST_PASS]
+    fail_patterns: [ASSERTION FAILED, TEST_FAIL]
+    plusargs: [+MODE=pass]
+  - id: irq_router_negative
+    title: Priority mismatch negative test
+    module: tb_irq_router_negative
+    tags: [rtl, dv, negative, iverilog]
+    seed: 17
+    owner: dv
+    expected_runtime_sec: 0.2
+    design_units: [irq_router.sv]
+    profile: real_iverilog
+    sources: [tb/tb_irq_router_negative.sv]
+    pass_patterns: [TEST_PASS]
+    fail_patterns: [ASSERTION FAILED, TEST_FAIL]
+    plusargs: [+MODE=fail]

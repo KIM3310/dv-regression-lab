@@ -9,6 +9,14 @@ class SimulatorConfig:
     kind: str = "mock"
     compile_timeout_sec: int = 30
     run_timeout_sec: int = 120
+    executable: str = ""
+    runner_executable: str = ""
+    work_dir: str = "."
+    sources: List[str] = field(default_factory=list)
+    include_dirs: List[str] = field(default_factory=list)
+    compile_flags: List[str] = field(default_factory=list)
+    shared_defines: Dict[str, str] = field(default_factory=dict)
+    top_module: str = ""
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SimulatorConfig":
@@ -16,6 +24,14 @@ class SimulatorConfig:
             kind=data.get("kind", "mock"),
             compile_timeout_sec=int(data.get("compile_timeout_sec", 30)),
             run_timeout_sec=int(data.get("run_timeout_sec", 120)),
+            executable=data.get("executable", ""),
+            runner_executable=data.get("runner_executable", ""),
+            work_dir=data.get("work_dir", "."),
+            sources=list(data.get("sources", [])),
+            include_dirs=list(data.get("include_dirs", [])),
+            compile_flags=list(data.get("compile_flags", [])),
+            shared_defines=dict(data.get("shared_defines", {})),
+            top_module=data.get("top_module", ""),
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -34,6 +50,12 @@ class TestCaseSpec:
     design_units: List[str] = field(default_factory=list)
     profile: str = "pass"
     notes: str = ""
+    sources: List[str] = field(default_factory=list)
+    plusargs: List[str] = field(default_factory=list)
+    pass_patterns: List[str] = field(default_factory=list)
+    fail_patterns: List[str] = field(default_factory=list)
+    compile_defines: Dict[str, str] = field(default_factory=dict)
+    timeout_sec: Optional[int] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "TestCaseSpec":
@@ -48,6 +70,12 @@ class TestCaseSpec:
             design_units=list(data.get("design_units", [])),
             profile=data.get("profile", "pass"),
             notes=data.get("notes", ""),
+            sources=list(data.get("sources", [])),
+            plusargs=list(data.get("plusargs", [])),
+            pass_patterns=list(data.get("pass_patterns", [])),
+            fail_patterns=list(data.get("fail_patterns", [])),
+            compile_defines=dict(data.get("compile_defines", {})),
+            timeout_sec=int(data["timeout_sec"]) if data.get("timeout_sec") is not None else None,
         )
 
     def to_dict(self) -> Dict[str, Any]:

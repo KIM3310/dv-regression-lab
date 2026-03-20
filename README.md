@@ -26,6 +26,7 @@ to see platform thinking around:
 
 - Runs RTL/DV regression suites from YAML specs
 - Supports a deterministic `mock` simulator adapter for local demos
+- Supports a real `iverilog` adapter for compile-and-run RTL smoke checks
 - Persists run history and artifacts to a local store
 - Builds a failure taxonomy for compile, timeout, assertion, protocol, and X-propagation classes
 - Flags flaky cases across repeated runs
@@ -41,7 +42,7 @@ This is not a toy chatbot with a semiconductor label on top. The repo is deliber
 
 - `suite spec` -> describes tests, seeds, owners, design units, and expected runtime
 - `orchestrator` -> schedules cases and writes artifacts
-- `simulator adapter` -> can stay local with `mock` or be swapped for real simulator commands later
+- `simulator adapter` -> can stay local with `mock` or execute checked-in RTL/tb sources through `iverilog`
 - `triage engine` -> classifies failures and recommends reruns
 - `review pack` -> packages promotion posture, riskiest cases, and next actions
 - `trend view` -> compares nightly history for one suite
@@ -64,6 +65,12 @@ Run a regression:
 
 ```bash
 python3 -m dv_regression_lab run examples/soc_smoke.yaml
+```
+
+Run the real RTL smoke example when `iverilog` and `vvp` are installed:
+
+```bash
+python3 -m dv_regression_lab run examples/rtl_smoke_iverilog.yaml
 ```
 
 Inspect stored runs:
@@ -148,6 +155,7 @@ Flaky cases detected across run history. Stabilize seeds before claiming closure
 
 - [examples/soc_smoke.yaml](examples/soc_smoke.yaml)
 - [examples/power_intent_nightly.yaml](examples/power_intent_nightly.yaml)
+- [examples/rtl_smoke_iverilog.yaml](examples/rtl_smoke_iverilog.yaml)
 
 ## Repo layout
 
@@ -157,6 +165,8 @@ Flaky cases detected across run history. Stabilize seeds before claiming closure
 - [dv_regression_lab/taxonomy.py](dv_regression_lab/taxonomy.py)
 - [dv_regression_lab/store.py](dv_regression_lab/store.py)
 - [tests/test_api.py](tests/test_api.py)
+- [rtl/irq_router.sv](rtl/irq_router.sv)
+- [tb/tb_irq_router_smoke.sv](tb/tb_irq_router_smoke.sv)
 
 ## What to say in interview
 
@@ -167,6 +177,7 @@ Use this repo to position yourself as someone who can support semiconductor desi
 - "I treated DV failures as platform data and operator workflow problems."
 - "The simulator is abstracted so the same control layer can wrap mock, shell, or real EDA flows."
 - "I added review-pack and trend surfaces because design organizations care about promotion decisions, not just raw test logs."
+- "I moved beyond a mock-only demo and added a real Icarus Verilog execution path with checked-in RTL and testbenches."
 
 ## Why This Fits Platform Roles
 
@@ -186,5 +197,19 @@ That makes the positioning cleaner. It shows platform leverage around semiconduc
 
 ## Current scope
 
-The checked-in adapter is `mock` so the project runs anywhere. The extension point is intentional:
-the next step is wiring real `iverilog`, `verilator`, or internal shell-based flows behind the same adapter interface.
+The repo now ships with two execution paths:
+
+- `mock` for deterministic demos
+- `iverilog` for real compile-and-run RTL smoke cases
+
+The next extension is adding `verilator` or internal farm-wrapper commands behind the same adapter interface.
+
+## Tooling Note
+
+This repo includes tests that validate the `iverilog` adapter with fake shims, so CI can still verify command construction
+when the actual simulator is absent. To run the real RTL path locally, install Icarus Verilog so both `iverilog` and `vvp`
+are on `PATH`, then run:
+
+```bash
+python3 -m dv_regression_lab run examples/rtl_smoke_iverilog.yaml
+```

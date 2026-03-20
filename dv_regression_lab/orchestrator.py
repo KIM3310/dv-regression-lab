@@ -20,7 +20,7 @@ def load_suite(suite_path: Path) -> SuiteSpec:
 
 def run_suite(suite_path: Path, store: RunStore) -> RegressionRun:
     suite = load_suite(suite_path)
-    adapter = build_adapter(suite.simulator)
+    adapter = build_adapter(suite.simulator, suite_path.parent)
     requested_at = dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
     run_id = _build_run_id()
     artifacts_root = store.artifacts_dir / run_id

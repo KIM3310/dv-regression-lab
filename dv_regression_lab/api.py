@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from .analytics import build_review_pack, build_suite_trend
 from .dashboard import render_dashboard
 from .orchestrator import list_example_suites, resolve_suite_path, run_suite
+from .simulator import available_simulators
 from .store import RunStore
 from .taxonomy import FAILURE_TAXONOMY
 
@@ -51,6 +52,7 @@ def create_app(store_root: Optional[Path] = None) -> FastAPI:
             "role_fit": ["design-platform", "design-verification"],
             "store_root": str(store.root),
             "example_suite_count": len(list_example_suites(root)),
+            "available_simulators": available_simulators(),
         }
 
     @app.get("/v1/failure-taxonomy")
