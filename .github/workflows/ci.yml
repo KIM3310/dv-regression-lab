@@ -58,15 +58,7 @@ jobs:
           python -m dv_regression_lab run examples/rtl_smoke_iverilog.yaml
           python -m dv_regression_lab list-runs
 
-          latest_run_id="$(python - <<'PY'
-from pathlib import Path
-from dv_regression_lab.store import RunStore
-
-store = RunStore(Path(".data"))
-runs = store.list_runs(limit=10)
-print(runs[0].run_id)
-PY
-          )"
+          latest_run_id="$(python -c 'from pathlib import Path; from dv_regression_lab.store import RunStore; print(RunStore(Path(".data")).list_runs(limit=10)[0].run_id)')"
 
           python -m dv_regression_lab review-pack "$latest_run_id"
           python -m dv_regression_lab suite-trend rtl_smoke_iverilog
@@ -80,4 +72,3 @@ PY
             .data/runs
             .data/artifacts
           if-no-files-found: ignore
-
