@@ -1,5 +1,7 @@
 # DV Regression Lab
 
+[![CI](https://github.com/KIM3310/dv-regression-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/KIM3310/dv-regression-lab/actions/workflows/ci.yml)
+
 `dv-regression-lab` is a local-first regression control tower for RTL and Design Verification workflows.
 It is built to answer a very specific platform question:
 
@@ -7,6 +9,8 @@ It is built to answer a very specific platform question:
 > detect flaky tests, and hand back operator-friendly triage without pretending I designed the silicon myself?
 
 This repo is the answer.
+
+GitHub Actions continuously checks lint, unit tests, mock regressions, and the real `iverilog` smoke path.
 
 ## Why this project exists
 
@@ -117,6 +121,8 @@ If your user bin is already on `PATH`, the installed shortcut `dvrl` works too.
 - `GET /v1/runs/{run_id}/triage`
 - `GET /v1/runs/{run_id}/review-pack`
 - `GET /v1/suites/{suite_id}/trend`
+
+`GET /v1/meta` also reports detected simulator availability so reviewers can see whether the environment can execute `mock`, `iverilog`, or both.
 
 Example run request:
 

@@ -14,6 +14,7 @@ def test_api_runs_suite_and_returns_triage(tmp_path):
     meta_response = client.get("/v1/meta")
     assert meta_response.status_code == 200
     assert meta_response.json()["service"] == "dv-regression-lab"
+    assert meta_response.json()["available_simulators"]["mock"] is True
 
     create_response = client.post("/v1/runs", json={"suite_path": str(suite_path)})
     assert create_response.status_code == 200
@@ -49,3 +50,4 @@ def test_examples_endpoint_lists_bundled_suites(tmp_path):
     suite_ids = {item["suite_id"] for item in response.json()}
     assert "soc_smoke_matrix" in suite_ids
     assert "power_intent_nightly" in suite_ids
+    assert "rtl_smoke_iverilog" in suite_ids
