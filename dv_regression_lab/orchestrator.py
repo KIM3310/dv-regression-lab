@@ -21,7 +21,7 @@ def load_suite(suite_path: Path) -> SuiteSpec:
 def run_suite(suite_path: Path, store: RunStore) -> RegressionRun:
     suite = load_suite(suite_path)
     adapter = build_adapter(suite.simulator, suite_path.parent)
-    requested_at = dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    requested_at = dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat() + "Z"
     run_id = _build_run_id()
     artifacts_root = store.artifacts_dir / run_id
     artifacts_root.mkdir(parents=True, exist_ok=True)
@@ -42,7 +42,7 @@ def run_suite(suite_path: Path, store: RunStore) -> RegressionRun:
     duration_sec = round(sum(result.runtime_sec for result in results), 2)
     pass_rate = round((passed / len(results)) if results else 0.0, 3)
     quality_gate = _quality_gate(results=results, pass_rate=pass_rate)
-    completed_at = dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    completed_at = dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat() + "Z"
 
     run = RegressionRun(
         run_id=run_id,
@@ -91,7 +91,7 @@ def resolve_suite_path(project_root: Path, raw_path: str) -> Path:
 
 
 def _build_run_id() -> str:
-    stamp = dt.datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    stamp = dt.datetime.now(dt.UTC).strftime("%Y%m%d%H%M%S")
     return f"dvrl-{stamp}-{secrets.token_hex(3)}"
 
 
