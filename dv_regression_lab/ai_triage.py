@@ -1,10 +1,11 @@
 """DV Triage AI Assistant - OpenAI-powered failure analysis for regression runs."""
+
 from __future__ import annotations
 
 import os
 from typing import Any, Dict, List, Optional
 
-from .models import RegressionRun, TriageSummary
+from .models import RegressionRun
 
 _SYSTEM_PROMPT = """\
 You are an expert Design Verification (DV) triage engineer. You analyze RTL/DV regression run
@@ -64,9 +65,7 @@ def _build_context_block(run: RegressionRun) -> str:
         if t.hot_design_units:
             lines.append("Hot design units:")
             for unit in t.hot_design_units:
-                lines.append(
-                    f"  {unit['design_unit']}: {unit['failing_cases']} failing case(s)"
-                )
+                lines.append(f"  {unit['design_unit']}: {unit['failing_cases']} failing case(s)")
 
         if t.operator_brief:
             lines.append("Operator brief:")
@@ -75,7 +74,9 @@ def _build_context_block(run: RegressionRun) -> str:
 
     if run.results:
         lines.append("")
-        lines.append(f"=== FAILED CASES ({sum(1 for r in run.results if r.status == 'failed')}) ===")
+        lines.append(
+            f"=== FAILED CASES ({sum(1 for r in run.results if r.status == 'failed')}) ==="
+        )
         for result in run.results:
             if result.status != "failed":
                 continue
@@ -94,9 +95,7 @@ class _StubClient:
     """Fallback when OPENAI_API_KEY is not set. Returns canned responses."""
 
     def chat(self, messages: List[Dict[str, str]]) -> str:
-        last_user = next(
-            (m["content"] for m in reversed(messages) if m["role"] == "user"), ""
-        )
+        last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
         lower = last_user.lower()
         if "flaky" in lower:
             return (
@@ -193,9 +192,7 @@ class DVTriageAssistant:
 
     def _build_messages(self) -> List[Dict[str, str]]:
         system_with_context = (
-            _SYSTEM_PROMPT
-            + "\n\n=== REGRESSION RUN CONTEXT ===\n"
-            + self._context_block
+            _SYSTEM_PROMPT + "\n\n=== REGRESSION RUN CONTEXT ===\n" + self._context_block
         )
         messages: List[Dict[str, str]] = [{"role": "system", "content": system_with_context}]
         messages.extend(self._history)

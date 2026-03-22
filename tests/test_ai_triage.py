@@ -1,10 +1,10 @@
 """Tests for dv_regression_lab.ai_triage — all external calls mocked."""
+
 from __future__ import annotations
 
 from typing import Any, Dict, List
 from unittest.mock import MagicMock, patch
 
-import pytest
 
 from dv_regression_lab.ai_triage import (
     DVTriageAssistant,
@@ -184,6 +184,7 @@ def test_assistant_uses_stub_when_no_key():
     with patch.dict("os.environ", {}, clear=True):
         # Ensure OPENAI_API_KEY is absent
         import os
+
         os.environ.pop("OPENAI_API_KEY", None)
         assistant = DVTriageAssistant(run, api_key=None)
     assert assistant.using_stub is True
@@ -193,6 +194,7 @@ def test_assistant_stub_ask_returns_string():
     run = _make_run()
     with patch.dict("os.environ", {}, clear=True):
         import os
+
         os.environ.pop("OPENAI_API_KEY", None)
         assistant = DVTriageAssistant(run, api_key=None)
     reply = assistant.ask("What caused this failure?")
@@ -204,6 +206,7 @@ def test_assistant_history_grows_with_turns():
     run = _make_run()
     with patch.dict("os.environ", {}, clear=True):
         import os
+
         os.environ.pop("OPENAI_API_KEY", None)
         assistant = DVTriageAssistant(run, api_key=None)
     assistant.ask("What caused this failure?")
@@ -215,6 +218,7 @@ def test_assistant_reset_clears_history():
     run = _make_run()
     with patch.dict("os.environ", {}, clear=True):
         import os
+
         os.environ.pop("OPENAI_API_KEY", None)
         assistant = DVTriageAssistant(run, api_key=None)
     assistant.ask("Any flaky tests?")
@@ -226,6 +230,7 @@ def test_assistant_history_returns_copy():
     run = _make_run()
     with patch.dict("os.environ", {}, clear=True):
         import os
+
         os.environ.pop("OPENAI_API_KEY", None)
         assistant = DVTriageAssistant(run, api_key=None)
     assistant.ask("Question")
@@ -251,7 +256,7 @@ def _make_openai_response(content: str) -> Any:
 
 def test_assistant_openai_path_called_with_messages():
     run = _make_run()
-    mock_response = _make_openai_response("The timeout is caused by a DMA deadlock.")
+    _make_openai_response("The timeout is caused by a DMA deadlock.")
 
     with patch("dv_regression_lab.ai_triage._OpenAIClient") as MockClient:
         instance = MockClient.return_value
