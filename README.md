@@ -1,5 +1,9 @@
 # DV Regression Lab
 
+> **Archived / Supporting repo**  
+> The active runtime reliability and regression-proof story is now centered on **stage-pilot**.  
+> Keep this repo as historical proof for the dedicated DV regression control-tower lane.
+
 [![CI](https://github.com/KIM3310/dv-regression-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/KIM3310/dv-regression-lab/actions/workflows/ci.yml)
 
 `dv-regression-lab` is a local-first regression control tower for RTL and Design Verification workflows.
