@@ -1,0 +1,64 @@
+suite_id: soc_smoke_matrix
+title: SoC smoke regression for AXI, CSR, DMA, and interrupt paths
+owner: dv-platform
+description: Daily smoke gate for a multi-IP subsystem with interface monitors and scoreboard checks.
+simulator:
+  kind: mock
+  compile_timeout_sec: 30
+  run_timeout_sec: 180
+tests:
+  - id: axi_write_smoke
+    title: AXI write burst smoke
+    module: tb_axi_write_smoke
+    tags: [smoke, axi]
+    seed: 101
+    owner: dv
+    expected_runtime_sec: 6.1
+    design_units: [axi_fabric.sv, dma_engine.sv]
+    profile: pass
+  - id: csr_access_negative
+    title: Illegal CSR access should assert
+    module: tb_csr_access_negative
+    tags: [smoke, csr, negative]
+    seed: 202
+    owner: dv
+    expected_runtime_sec: 5.2
+    design_units: [csr_router.sv, permission_matrix.sv]
+    profile: assertion_failure
+  - id: irq_deadlock_repro
+    title: Interrupt completion deadlock repro
+    module: tb_irq_deadlock_repro
+    tags: [stress, interrupt]
+    seed: 303
+    owner: dv-platform
+    expected_runtime_sec: 9.0
+    design_units: [irq_fsm.sv, dma_engine.sv]
+    profile: timeout
+  - id: dma_response_ordering
+    title: DMA response ordering check
+    module: tb_dma_response_ordering
+    tags: [nightly, dma]
+    seed: 404
+    owner: dv
+    expected_runtime_sec: 8.6
+    design_units: [dma_engine.sv, axi_fabric.sv]
+    profile: protocol_mismatch
+  - id: reset_sanity
+    title: Reset release sanity
+    module: tb_reset_sanity
+    tags: [smoke, reset]
+    seed: 505
+    owner: dv
+    expected_runtime_sec: 4.0
+    design_units: [reset_ctrl.sv]
+    profile: pass
+  - id: cache_coherency_flake
+    title: Cache coherency intermittent issue
+    module: tb_cache_coherency_flake
+    tags: [nightly, coherency, flaky]
+    seed: 606
+    owner: dv
+    expected_runtime_sec: 7.8
+    design_units: [l2_cache.sv, coherency_agent.sv]
+    profile: flaky_assertion
+
