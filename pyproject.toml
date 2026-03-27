@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Local-first RTL/DV regression control tower with triage, flaky detection, and artifact traceability."
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Doeon Kim" }]
 dependencies = [
   "fastapi>=0.110",
