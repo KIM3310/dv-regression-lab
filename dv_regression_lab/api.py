@@ -79,7 +79,9 @@ def create_app(store_root: Optional[Path] = None) -> FastAPI:
                 "/v1/proof-map",
                 "/v1/meta",
                 "/v1/runs",
-                f"/v1/runs/{latest_run_id}/review-pack" if latest_run_id else "/v1/runs/{run_id}/review-pack",
+                f"/v1/runs/{latest_run_id}/review-pack"
+                if latest_run_id
+                else "/v1/runs/{run_id}/review-pack",
                 f"/v1/suites/{latest_suite_id}/trend",
             ],
             "decision_support": [
@@ -89,7 +91,9 @@ def create_app(store_root: Optional[Path] = None) -> FastAPI:
                 },
                 {
                     "need": "promotion posture and next actions for one run",
-                    "route": f"/v1/runs/{latest_run_id}/review-pack" if latest_run_id else "/v1/runs/{run_id}/review-pack",
+                    "route": f"/v1/runs/{latest_run_id}/review-pack"
+                    if latest_run_id
+                    else "/v1/runs/{run_id}/review-pack",
                 },
                 {
                     "need": "nightly drift and recurring failures across history",
