@@ -19,15 +19,14 @@ GitHub Actions continuously checks lint, unit tests, mock regressions, and the r
 ## Review this first
 
 1. `GET /v1/proof-map` — choose whether the first proof should be meta, one run, or suite trend
-2. `GET /v1/meta` — confirm simulator availability and platform role-fit
+2. `GET /v1/meta` — confirm simulator availability and platform boundary
 3. `GET /v1/runs` — inspect recent regression history
 4. `GET /v1/runs/{run_id}/review-pack` — read promotion posture and next actions
 5. `GET /v1/suites/{suite_id}/trend` — inspect recurring failure drift across nightly history
 
 ## Why this project exists
 
-For `Design Platform & RTL` and `Design Verification` roles, generic AI demos are not enough. Hiring teams want
-to see platform thinking around:
+Generic AI demos are not enough for regression-heavy engineering systems. This project focuses on platform thinking around:
 
 - regression execution
 - artifact retention
