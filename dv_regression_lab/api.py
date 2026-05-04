@@ -49,7 +49,7 @@ def create_app(store_root: Optional[Path] = None) -> FastAPI:
     def meta() -> dict:
         return {
             "service": "dv-regression-lab",
-            "role_fit": ["design-platform", "design-verification"],
+            "capability_fit": ["design-platform", "design-verification"],
             "store_root": str(store.root),
             "example_suite_count": len(list_example_suites(root)),
             "available_simulators": available_simulators(),
@@ -86,7 +86,7 @@ def create_app(store_root: Optional[Path] = None) -> FastAPI:
             ],
             "decision_support": [
                 {
-                    "need": "environment simulator support and role-fit first",
+                    "need": "environment simulator support and capability alignment first",
                     "route": "/v1/meta",
                 },
                 {
